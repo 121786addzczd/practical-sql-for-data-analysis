@@ -1,0 +1,52 @@
+erDiagram
+
+    users ||--o{ user_subscriptions : "has"
+    users ||--o{ user_contents : "has"
+    users {
+        int id PK
+        varchar name
+        varchar level
+        text goal "目標設定"
+        timestamp created_at
+    }
+
+    subscriptions ||--o{ user_subscriptions : "has"
+    subscriptions {
+        int id PK
+        varchar plan_name
+        int monthly_fee "月額料金"
+    }
+
+    user_subscriptions ||--o{ billing_periods : "has"
+    user_subscriptions {
+        int id PK
+        int user_id FK "Foreign Key to users"
+        int subscription_id FK "Foreign Key to subscriptions"
+        date start_date "契約開始年月"
+        date end_date "契約終了年月"
+        varchar status
+        timestamp created_at
+    }
+
+    billing_periods {
+        int id PK
+        int user_subscription_id FK "Foreign Key to user_subscriptions"
+        date start_date "請求開始年月日"
+        date end_date "請求終了年月日"
+        int amount "金額"
+        varchar status "支払い状況"
+    }
+
+    contents ||--o{ user_contents : "has"
+    contents {
+        int id PK
+        varchar title
+        varchar content_type
+    }
+
+    user_contents {
+        int id PK
+        int user_id FK "Foreign Key to users"
+        int content_id FK "Foreign Key to contents"
+        boolean completed
+    }
